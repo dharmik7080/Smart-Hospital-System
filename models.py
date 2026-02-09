@@ -142,10 +142,17 @@ class BloodInventory:
     def update_stock(self, blood_type, qty_change):
         if blood_type in self.types:
             index = self.types.index(blood_type)
+            current_qty = self.quantities[index]
+            
+            # Validation: Prevent negative stock
+            if current_qty + qty_change < 0:
+                return False, f"Error: Cannot remove {abs(qty_change)} units. Only {current_qty} available."
+            
             self.quantities[index] += qty_change
             self._save()
+            return True, f"Updated {blood_type} by {qty_change} units."
         else:
-            print(f"Error: Unknown blood type {blood_type}")
+            return False, f"Error: Unknown blood type {blood_type}"
 
     def _save(self):
         # Helper to save in the new structured format

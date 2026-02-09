@@ -2,9 +2,6 @@
 # Environment Variables
 .env
 
-# Local Data (Privacy)
-data/*.json
-
 # Python Artifacts
 __pycache__/
 *.pyc

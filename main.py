@@ -512,7 +512,38 @@ elif menu == "Blood Bank":
         "Units": inventory.quantities
     }).set_index("Blood Type")
     
-    st.bar_chart(df_inventory)
+    # 3. Visualization
+    st.subheader("Current Stock Levels")
+    
+    # Matplotlib Visualization
+    import matplotlib.pyplot as plt
+    
+    fig, ax = plt.subplots(figsize=(10, 5))
+    
+    # Conditional Colors: Red if < 5, Blue otherwise
+    colors = ['red' if x < 5 else 'skyblue' for x in inventory.quantities]
+    
+    bars = ax.bar(inventory.types, inventory.quantities, color=colors)
+    
+    # Y-Axis Settings
+    ax.set_ylim(bottom=0)
+    ax.set_ylabel("Units Available")
+    ax.set_title("Blood Inventory Status")
+    
+    # Critical Threshold Line
+    ax.axhline(y=5, color='red', linestyle='--', label='Critical Threshold (5 Units)')
+    ax.legend()
+    
+    # Annotations on top of bars
+    for bar in bars:
+        height = bar.get_height()
+        ax.annotate(f'{height}',
+                    xy=(bar.get_x() + bar.get_width() / 2, height),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    ha='center', va='bottom')
+    
+    st.pyplot(fig)
 
     # 4. Update Logic
     with st.expander("Update Stock"):
@@ -523,6 +554,10 @@ elif menu == "Blood Bank":
             qty = st.number_input("Units to Add/Remove", min_value=-10, max_value=50, step=1)
         
         if st.button("Update Stock"):
-            inventory.update_stock(b_type, int(qty))
-            st.success(f"Updated {b_type} by {qty} units.")
-            st.rerun() # Refresh to show new graph
+            success, message = inventory.update_stock(b_type, int(qty))
+            
+            if success:
+                st.success(message)
+                st.rerun() # Refresh to show new graph
+            else:
+                st.error(message)
