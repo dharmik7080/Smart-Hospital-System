@@ -489,8 +489,6 @@ elif menu == "Doctor's Cabin":
 
 elif menu == "Blood Bank":
     st.title("Blood Bank 🩸")
-    st.write("Blood Inventory Management (NumPy Powered)")
-
     # 1. Initialize Inventory (using Session State for persistence in POC)
     if 'inventory' not in st.session_state:
         st.session_state['inventory'] = BloodInventory()
@@ -505,15 +503,6 @@ elif menu == "Blood Bank":
         st.success("Stock levels are adequate.")
 
     # 3. Visualization
-    st.subheader("Current Stock Levels")
-    # Create DataFrame from NumPy array
-    df_inventory = pd.DataFrame({
-        "Blood Type": inventory.types,
-        "Units": inventory.quantities
-    }).set_index("Blood Type")
-    
-    # 3. Visualization
-    st.subheader("Current Stock Levels")
     
     # Matplotlib Visualization
     import matplotlib.pyplot as plt
