@@ -56,4 +56,4 @@ This repository is configured to exclude sensitive information:
     -   Use default credentials (if applicable) or create an Admin user via the interface if the system allows initialization.
 
 ---
-*Built with ❤️ using Streamlit and Google Gemini.*
+
